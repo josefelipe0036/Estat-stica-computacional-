@@ -1,0 +1,119 @@
+---
+title: ''
+subtitle: ""
+author: ""
+date: ""
+output:
+  pdf_document:
+  fig_crop: false
+highlight: tango
+number_sections: false
+fig_caption: true
+keep_tex: true
+includes:
+  in_header: Estilo.sty
+classoption: a4paper
+always_allow_html: true
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+
+```{=tex}
+\begin{center}
+{\Large
+  Departamento de Estatística} \\
+\vspace{0.5cm}
+\begin{figure}[!t]
+\centering
+\includegraphics[width=9cm, keepaspectratio]{logo-UnB.eps}
+\end{figure}
+\vskip 1em
+{\large
+  19 de abril de 2023}
+\vskip 3em
+{\LARGE
+  \textbf{Lista 1: geração de números pseudo-aleatórios}} \\
+\vskip 1em
+{\Large
+  Prof. Guilherme Rodrigues} \\
+\vskip 1em
+{\Large
+  Técnicas computacionais em Estatística} \\
+\vskip 1em
+\end{center}
+```
+\vskip 5em
+
+<!-- [label={(\Alph*)}] -->
+
+```{=tex}
+\begin{enumerate}
+\item \textbf{As questões deverão ser respondidas em um único relatório \emph{PDF} ou \emph{html}, produzido usando as funcionalidades do \emph{Rmarkdown} ou outra ferramenta equivalente}.
+\item \textbf{O aluno poderá consultar materiais relevantes disponíveis na internet, tais como livros, \emph{blogs} e artigos}.
+\item \textbf{O trabalho é individual. Suspeitas de plágio e compartilhamento de soluções serão tratadas com rigor.}
+\item \textbf{Os códigos \emph{R} utilizados devem ser disponibilizados na integra, seja no corpo do texto ou como anexo.}
+\item \textbf{O aluno deverá enviar o trabalho até a data especificada na plataforma Microsoft Teams.}
+\item \textbf{O trabalho será avaliado considerando o nível de qualidade do relatório, o que inclui a precisão das respostas, a pertinência das soluções encontradas, a formatação adotada, dentre outros aspectos correlatos.}
+\item \textbf{Escreva seu código com esmero, evitando operações redundantes, visando eficiência computacional, otimizando o uso de memória, comentando os resultados e usando as melhores práticas em programação.}
+\end{enumerate}
+```
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache=T, message=F, warning=F, error=F)
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load("gapminder", "tidyverse", "microbenchmark", "stringi")
+options(scipen=0)
+```
+
+\newpage
+
+## **Questão 1**
+
+**Simulando computacionalmente o gerador de Babel.**
+
+Todo seu destino, a cura do câncer e até o que vai acontecer no fim do mundo. Todas essas respostas já estão escritas na Biblioteca de Babel.
+Essa biblioteca proposta por Jorge Luís Borges é composta por um número infinito de galerias, contendo todos os livros possíveis.
+
+" [...] Um (livro) constava das letras M C V malevolamente repetidas da primeira linha até a última. Outro é um simples labirinto de letras mas a penúltima página diz 'ó tempo tuas pirâmides'."
+
+A maior parte dos livros não tem qualquer significado. Entretanto, embora improváveis, certos textos resultam em grandes obras, como o Bhagavad Gita. Considerando as afirmações acima e a lista de palavras existentes na língua portuguesa (disponível no arquivo "Dicionario.txt"), responda aos itens a seguir. Não faça distinção entre letras maiúsculas e minúisculas.
+
+**a)** Estime via simulação computacional (*Monte Carlo*) a
+probabilidade de se gerar uma palavra *válida* (isso é, do dicionário) ao sortear ao acaso sequências de 5 letras (todas com a mesma probabilidade). Em seguida, calcule analiticamente tal probabilidade e faça um gráfico indicando se a estimativa obtida se aproxima do valor teórico conforme a amostra aumenta. **Atenção**: utilize somente as letras do alfabeto sem carateres especiais.
+
+**b)** Estime a probabilidade da sequência gerada ser um palíndromo (ou
+seja, pode ser lida, indiferentemente, da esquerda para direita ou da
+direita para esquerda). Compare o resultado com a probabilidade exata, calculada analiticamente.
+
+**c)** Construa um gerador que alterne entre consoantes e vogais (se uma
+letra for uma vogal, a próxima será uma consoante e vice-versa). Qual a
+probabilidade de gerar uma palavra válida com este novo gerador?
+
+**d)** Considere um processo gerador de sequências de 5 caracteres no qual cada letra é sorteada com probabilidade proporcional à sua respectiva frequência na língua portuguesa (veja essa [página](https://pt.wikipedia.org/wiki/Frequ%C3%AAncia_de_letras?wprov=sfla1)).
+Suponha que esse processo gerou uma sequência com ao menos um "a". Neste caso, estime a probabilidade dessa sequência ser uma palavra válida. **Dica**: Use a função `sample` e edite o parâmetro `prob`. **Para pensar**: Você consegue calcular essa probabilidade analiticamente? (Não precisa responder.)
+
+
+## **Questão 2**
+
+**Gerando números pseudo-aleatórios.**
+
+**a)** Escreva uma função que gere, a partir do método da transformada integral, uma amostra aleatória de tamanho $n$ da distribuição Cauchy para $n$ e $\gamma$ arbitrários. A densidade da $\text{Cauchy}(\gamma)$ é dada por
+$$f(x)=\frac{1}{\pi \gamma (1 + (x/\gamma)^2)}.$$ 
+**Dica**: Veja essa [página](https://en.wikipedia.org/wiki/Cauchy_distribution).
+
+\vspace{.5cm}
+**b)** Uma variável aleatória discreta $X$ tem função massa de probabilidade
+\begin{eqnarray*}
+p(2)&=&0.3\\
+p(3)&=&0.1\\
+p(5)&=&0.1\\
+p(7)&=&0.2\\
+p(9)&=&0.3
+\end{eqnarray*}
+
+Use o método de transformação inversa para gerar uma amostra aleatória de tamanho 1000 a partir da distribuição de $X$. Construa uma tabela de frequência relativa e compare as probabilidades empíricas com as teóricas. Repita usando a função *sample* do R.
+
+\vspace{.5cm}
+**c)** Escreva uma função que gere amostras da distribuição Normal padrão ($\mu=0, \sigma=1$) usando o método de aceitação e rejeição adotando como função geradora de candidatos, $g(x)$, a distribuição Cauchy padrão (isso é, com $\gamma=1$).
+
